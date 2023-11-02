@@ -104,7 +104,7 @@ public class MyUdpClient
     /// <summary>
     /// 接收消息事件
     /// </summary>
-    public event EventHandler OnReceiveMessageEvent;
+    public event EventHandler<UdpClientEventArgs> OnReceiveMessageEvent;
 
 
 }
