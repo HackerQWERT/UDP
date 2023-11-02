@@ -1,8 +1,5 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace MyUdp;
@@ -40,7 +37,7 @@ public class MyUdpClient
             while (receiveMessageCancellationTokenSource.IsCancellationRequested == false)
             {
                 var message = await ReceiveAsync();
-                await OnReceiveMessageAsync(new object(), new UdpClientEventArgs { Message = message });
+                OnReceiveMessage(new object(), new UdpClientEventArgs { Message = message });
             }
         });
     }
@@ -99,25 +96,15 @@ public class MyUdpClient
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <returns></returns>
-    public async Task OnReceiveMessageAsync(object sender, UdpClientEventArgs e)
+    public void OnReceiveMessage(object sender, UdpClientEventArgs e)
     {
-        Task r = Task.Run(() =>
-        {
-            OnReceiveMessage?.Invoke(sender, e);
-        });
+        OnReceiveMessageEvent?.Invoke(sender, e);
     }
 
     /// <summary>
     /// 接收消息事件
     /// </summary>
-    public event UdpClientDelegate OnReceiveMessage;
+    public event EventHandler OnReceiveMessageEvent;
 
-
-    /// <summary>
-    /// 接收消息事件委托
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public delegate void UdpClientDelegate(object sender, UdpClientEventArgs e);
 
 }
